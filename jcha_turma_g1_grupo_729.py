@@ -20,7 +20,7 @@ b = 3
 # x0 : Aproximação Inicial
 x0 = float(2.5)
 # tol : tolerância
-tol = float(0.001)
+tol = float(0.0001)
 # nmax : Número máximo de interações
 nmax = int(20)
 
@@ -30,11 +30,11 @@ nmax = int(20)
 
 #Função que retorna o valor de x para a Lei da Função.
 def func(x):
-    return x*math.log10(x)-1
+    return float(x*math.log10(x)-1)
 
 #Função que retorna o valor de x para a derivada da Lei da Função.
 def func_(x):
-    return (math.log10(x)+1/math.log(10))
+    return float((math.log10(x)+1/math.log(10)))
 
 #Função para retornar o valor da aproximação pelo metódo do ponto fixo.
 def ponto_fixo(func,x0,nmax,tol):
@@ -147,29 +147,36 @@ def bisseccao(f,a,b,nmax,tol):
         #Escreve o valor de n
         escreve_n([n,a,b])
         #Se o valor em módulo(abs) do ponto x1 para a Lei da Função for menor que a tolerância:
-        if abs(f_x1) < tol: 
+        if abs(f_x1) < tol:
+            print("tolerancia")
             #Se a interação não for a primeira(n=0) vamos conferir o critério de parada.
             if n>0:
+                print("n>0")
                 #Se o valor absoluto de (b-a)/x1 for menor que a tolerância iremos interromper a execução
                 # do código pelo critério de parada.
                 if abs(f_d) < tol:
                     #Interrompe as interações.
+                    print("precisão bateu")
                     return (False,True)
             #Se a condição de parada for satisfeita na primeira interação iremos parar a execução.
             elif n==0:
+                print("n==0")
                 #Interrompe as interações.
                 return (False,True)
         #Caso contrário iremos prosseguir com o cálculo da aproximação para a funcão.
         else:
+            print(n)
             #Realizamos a verificação para ver como iremos continuar com a interação e qual parâmetro
             # será usado para prosseguir a interação.
             if func(x1)*func(a) > 0:
                 #Atribuímos o valor de x1 à a.
                 a=x1
+                print("entrou a=x1")
             #Se não:
             else:
                 #Atribuímos o valor de x1 à b.
                 b=x1
+                print("entrou b=x1")
         n=n+1
         escreve_linha([x1,f_a,f_b,f_x1,abs(f_d)],True)
 #        lista_bisseccao = [a,b,x1,f_a,f_b,f_x1,abs(f_d)]
