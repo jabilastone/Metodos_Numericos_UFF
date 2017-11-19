@@ -65,12 +65,11 @@ def ponto_fixo(func,x0,nmax,tol):
             elif n==0:
                 #Interrompe as interações.
                 return (False,True)
-        #Se a condição de parada não for satisfeita iremos continuar a interação.
-        else:
-            #Cálculo da próxima interação.
-            x1 = 1/math.log10(x0)
-            #Guardamos o valor da aproximação calculada para a próxima interação.
-            x0 = x1
+        #Cálculo da próxima interação.
+        x1 = 1/math.log10(x0)
+        #Guardamos o valor da aproximação calculada para a próxima interação.
+        x0 = x1
+        
         lista_ponto = [x1,x0,x1]
         lista_ponto_str = ("{:.5e}".format(Decimal(item)) for item in lista_ponto)
         lista_n = [n]
@@ -98,19 +97,21 @@ def newtonraphson(func,func_,x0,nmax,tol):
     file.write("%s\n" % ("i;x1;|f(x1)|;|(x1-x0)|/|x1|"))
     #Enquanto n menor ou igual ao número máximo de interações(nmax) faça:
     while n<=nmax and True:
+        escreve_n([n,x0])
         #Cálcula o valor da aproximação com base na aproximação inicial menos a função no ponto da aproximação
         # inicial sobre a derivada da função na aproximação inicial.
         x1 = x0 - (func(x0)/func_(x0))
         #Se o valor da aproximação calculada menos o valor da aproximação iniciação for menor que que a tolerância
         # interrompe o código.
-        if x1-x0 <tol:
+        if (abs((x1-x0))/abs(x1)) < tol and abs (func(x1)) < tol:
 #            Interrompe as interações.
             return (False,True)
         #Caso contrário continua o cálculo das interações para aproximar a raiz.
         else:
             #Guardamos o valor da aproximação calculada para a próxima interação.
             x0=x1
-        lista_newton = [x1,x0,x1]
+            
+        lista_newton = [x1,func(x1),(abs((x1-x0))/abs(x1))]
         lista_newton_str = ("{:.5e}".format(Decimal(item)) for item in lista_newton)
         lista_n = [n]
         lista_n.extend(lista_newton_str)
@@ -148,52 +149,37 @@ def bisseccao(f,a,b,nmax,tol):
         escreve_n([n,a,b])
         #Se o valor em módulo(abs) do ponto x1 para a Lei da Função for menor que a tolerância:
         if abs(f_x1) < tol:
-            print("tolerancia")
             #Se a interação não for a primeira(n=0) vamos conferir o critério de parada.
             if n>0:
-                print("n>0")
                 #Se o valor absoluto de (b-a)/x1 for menor que a tolerância iremos interromper a execução
                 # do código pelo critério de parada.
                 if abs(f_d) < tol:
                     #Interrompe as interações.
-                    print("precisão bateu")
+                    escreve_linha([x1,f_a,f_b,f_x1,abs(f_d)],True)
                     return (False,True)
             #Se a condição de parada for satisfeita na primeira interação iremos parar a execução.
             elif n==0:
-                print("n==0")
-                #Interrompe as interações.
+                #Interrompe as interações
+                escreve_linha([x1,f_a,f_b,f_x1,abs(f_d)],True)
                 return (False,True)
         #Caso contrário iremos prosseguir com o cálculo da aproximação para a funcão.
+        print(n)
+        #Realizamos a verificação para ver como iremos continuar com a interação e qual parâmetro
+        # será usado para prosseguir a interação.
+        if func(x1)*func(a) > 0:
+            #Atribuímos o valor de x1 à a.
+            a=x1
+        #Se não:
         else:
-            print(n)
-            #Realizamos a verificação para ver como iremos continuar com a interação e qual parâmetro
-            # será usado para prosseguir a interação.
-            if func(x1)*func(a) > 0:
-                #Atribuímos o valor de x1 à a.
-                a=x1
-                print("entrou a=x1")
-            #Se não:
-            else:
-                #Atribuímos o valor de x1 à b.
-                b=x1
-                print("entrou b=x1")
+            #Atribuímos o valor de x1 à b.
+            b=x1
         n=n+1
         escreve_linha([x1,f_a,f_b,f_x1,abs(f_d)],True)
-#        lista_bisseccao = [a,b,x1,f_a,f_b,f_x1,abs(f_d)]
-#        lista_bisseccao_str = ("{:.10e}".format(Decimal(item)) for item in lista_bisseccao)
-#        lista_n = [n]
-#        lista_n.extend(lista_bisseccao_str)
-#        file.write(";".join(map(str,lista_n)))
-#        file.write("\n")
-
-#    file.write("Aproximação: "+ str(lista_n[2]))
-#    file.write("\n")
     return (x1,False)
 
 def escreve_linha(valor,quebra):
     for item in valor:
         valor_decimal = ("{:.5e}".format(item))
-#        file.write(";".join(map(str,valor_decimal)))
         file.write((valor_decimal+";"))
     if quebra==True:
         file.write("\n")
@@ -201,7 +187,6 @@ def escreve_linha(valor,quebra):
 def escreve_n(n):
     for item in n:
         file.write(str(item)+";")
-
 
 ######################################
 ######### Rotina
