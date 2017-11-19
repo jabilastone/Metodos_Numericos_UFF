@@ -160,7 +160,8 @@ def bisseccao(f,a,b,nmax,tol):
         f_b = float(func(b))
         f_d = float((b-a)/x1)
         #Escreve o valor de n e algumas variáveis antes que elas sofram mudanças devido a interação.
-        escreve_valor([n,a,b])
+        escreve_valor([n])
+        escreve_linha([a,b],False)
         #Se o valor em módulo(abs) do ponto x1 para a Lei da Função for menor que a tolerância:
         if abs(f_x1) < tol:
             #Se a interação não for a primeira(n=0) vamos conferir o critério de parada.
