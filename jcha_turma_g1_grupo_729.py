@@ -3,7 +3,6 @@
 ######################################
 
 import math
-from decimal import Decimal
 
 ######################################
 ######### Variáveis
@@ -46,53 +45,43 @@ def ponto_fixo(func,x0,nmax,tol):
     file.write("\n")
     file.write("%s\n" % "Metódo ponto fixo")
     file.write("%s\n" % ("i;x1;|f(x1)|;|(x1-x0)|/|x1|"))
-    #Faz o cálculo de x1 para metódo do ponto fixo.
-    # a função math.log10 - reprense o log na base 10 de x.
-    x1 = 1/math.log10(x0)
     #Enquanto n menor ou igual ao número máximo de interações(nmax) faça:
     while n<=nmax and True:
+        #Cálculo da próxima interação.
+        x1 = 1/math.log10(x0)
         #Cálcula os valores que serão usados ao longo do da interação para comparar com o critério de parada
         # e salvar no arquivo de resultado - assim poupamos custo computacional.
         f_b =abs(func(x1))
         f_a = abs((x1-x0)/x1)
         #Escreve os valores iniciais da interação.
         escreve_valor([n])
-        escreve_linha([x1,f_b,f_a],True)
         #Se o valor em módulo(abs) do ponto x1 para a Lei da Função for menor que a tolerância:
-        if f_b < tol: 
-            #Se a interação não for a primeira(n=0) vamos conferir o critério de parada.
-            if n>0:
-                #Se o valor em módulo de (x1-x0)/x1) for menor que a tolerância iremos parar a execução.
-                if f_a < tol:
-                    #Escreve os resultados atuais antes de interromper a execução
-                    escreve_linha([x1,f_b,f_a],True)
-                    #Escrevemos os resultados caso os critérios de parada sejam satisfeitos.
-                    file.write("Aproximação: "+ str("{:.5e}".format(x1)))
-                    file.write("\n")
-                    file.write("%s\n" % "Parada: Tolerância.")
-                    file.write("%s\n" % "----------------------------------------------------------------------------------")
-                    file.write("\n")
-                    #Interrompe as interações caso os critérios de parada sejam satisfeitos.
-                    return (False)
-            #Se a condição de parada for satisfeita na primeira interação iremos parar a execução.
-            elif n==0:
-                #Escreve os resultados atuais antes de interromper a execução
-                escreve_linha([x1,f_b,f_a],True)
-                #Escrevemos os resultados caso os critérios de parada sejam satisfeitos.
-                file.write("Aproximação: "+ str("{:.5e}".format(x1)))
-                file.write("\n")
-                file.write("%s\n" % "Parada: Tolerância.")
-                file.write("%s\n" % "----------------------------------------------------------------------------------")
-                file.write("\n")
-                #Interrompe as interações caso os critérios de parada sejam satisfeitos.
-                return (False)
-        #Cálculo da próxima interação.
-        x1 = 1/math.log10(x0)
-        #Guardamos o valor da aproximação calculada para a próxima interação.
-        x0 = x1
-        #Incrementamos o controlador da interação.
-        n=n+1
-    #Retornamos o valor da aproximação final para a a função principal.
+        if f_b < tol and f_a < tol:
+            #Escreve os resultados atuais antes de interromper a execução
+            escreve_linha([x1,f_b,f_a],True)
+            #Escrevemos os resultados caso os critérios de parada sejam satisfeitos.
+            file.write("Aproximação: "+ str("{:.5e}".format(x1)))
+            file.write("\n")
+            file.write("%s\n" % "Parada: Tolerância.")
+            file.write("%s\n" % "----------------------------------------------------------------------------------")
+            file.write("\n")
+            #Interrompe as interações caso os critérios de parada sejam satisfeitos.
+            return (False)
+        else:
+            #Guardamos o valor da aproximação calculada para a próxima interação.
+            x0 = x1
+            #Incrementamos o controlador da interação.
+            n=n+1
+            #Escreve os valores iniciais da interação.
+            escreve_linha([x1,f_b,f_a],True)
+    #Escrevemos os resultados caso o número máximo de interações seja atingido e o critério de parada
+    # não tenha sido satisfeito.
+    file.write("Aproximação: "+ str("{:.5e}".format(x1)))
+    file.write("\n")
+    file.write("%s\n" % "Parada: Número máximo de interações.")
+    file.write("%s\n" % "----------------------------------------------------------------------------------")
+    file.write("\n")
+    #Finalizamos a execução da função.
     return (False)
 
 #Função para retornar o valor da aproximação pelo metódo de Newton-Raphson.
