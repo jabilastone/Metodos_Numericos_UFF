@@ -137,18 +137,18 @@ def bisseccao(f,a,b,nmax,tol):
     while n<=nmax and True:
         # Faz o cálculo de x1 com base nos valores de a e b.
         x1 = (a+b)/2.0
-#        #Calcula o valor da Lei da Função no ponto x que será usado para salvar na planilha de resultados.
-#        f_a = func(a)
-#        f_x1 = func(x1)
-#        f_b = func(b)
-#        f_d = (b-a)/x1
+        #Calcula o valor da Lei da Função no ponto x que será usado para salvar na planilha de resultados.
+        f_a = func(a)
+        f_x1 = func(x1)
+        f_b = func(b)
+        f_d = (b-a)/x1
         #Se o valor em módulo(abs) do ponto x1 para a Lei da Função for menor que a tolerância:
-        if abs(func(x1)) < tol: 
+        if abs(f_x1) < tol: 
             #Se a interação não for a primeira(n=0) vamos conferir o critério de parada.
             if n>0:
                 #Se o valor absoluto de (b-a)/x1 for menor que a tolerância iremos interromper a execução
                 # do código pelo critério de parada.
-                if abs((b-a)/x1) < tol:
+                if abs(f_d) < tol:
                     #Interrompe as interações.
                     return (False,True)
             #Se a condição de parada for satisfeita na primeira interação iremos parar a execução.
@@ -166,7 +166,8 @@ def bisseccao(f,a,b,nmax,tol):
             else:
                 #Atribuímos o valor de x1 à b.
                 b=x1
-        lista_bisseccao = [a,b,x1,func(a),func(b),func(x1),abs((b-a)/x1)]
+                
+        lista_bisseccao = [a,b,x1,f_a,f_b,f_x1,abs(f_d)]
         lista_bisseccao_str = ("{:.5e}".format(Decimal(item)) for item in lista_bisseccao)
         lista_n = [n]
         lista_n.extend(lista_bisseccao_str)
