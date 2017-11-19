@@ -4,6 +4,8 @@
 
 import math
 from decimal import Decimal
+#from decimal import *
+#getcontext()
 
 ######################################
 ######### Variáveis
@@ -13,7 +15,7 @@ from decimal import Decimal
 # func(x) : Lei da Função
 # func_(x) : Derivada de func(x)
 # [a, b] : Intervalo dos valores
-a = 2.5
+a = 2
 b = 3
 # x0 : Aproximação Inicial
 x0 = float(2.5)
@@ -142,6 +144,8 @@ def bisseccao(f,a,b,nmax,tol):
         f_x1 = float(func(x1))
         f_b = float(func(b))
         f_d = float((b-a)/x1)
+        #Escreve o valor de n
+        escreve_n([n,a,b])
         #Se o valor em módulo(abs) do ponto x1 para a Lei da Função for menor que a tolerância:
         if abs(f_x1) < tol: 
             #Se a interação não for a primeira(n=0) vamos conferir o critério de parada.
@@ -166,21 +170,31 @@ def bisseccao(f,a,b,nmax,tol):
             else:
                 #Atribuímos o valor de x1 à b.
                 b=x1
-                
-        lista_bisseccao = [a,b,x1,f_a,f_b,f_x1,abs(f_d)]
-        lista_bisseccao_str = ("{:.10e}".format(Decimal(item)) for item in lista_bisseccao)
-        lista_n = [n]
-        lista_n.extend(lista_bisseccao_str)
-        file.write(";".join(map(str,lista_n)))
-        file.write("\n")
         n=n+1
-    file.write("Aproximação: "+ str(lista_n[2]))
-    file.write("\n")
+        escreve_linha([x1,f_a,f_b,f_x1,abs(f_d)],True)
+#        lista_bisseccao = [a,b,x1,f_a,f_b,f_x1,abs(f_d)]
+#        lista_bisseccao_str = ("{:.10e}".format(Decimal(item)) for item in lista_bisseccao)
+#        lista_n = [n]
+#        lista_n.extend(lista_bisseccao_str)
+#        file.write(";".join(map(str,lista_n)))
+#        file.write("\n")
+
+#    file.write("Aproximação: "+ str(lista_n[2]))
+#    file.write("\n")
     return (x1,False)
 
 def escreve_linha(valor,quebra):
-    valor_decimal = ("{:.10e}".format(valor))
-    file.write(";".join(map(str,valor_decimal)))
+    for item in valor:
+        valor_decimal = ("{:.5e}".format(item))
+#        file.write(";".join(map(str,valor_decimal)))
+        file.write((valor_decimal+";"))
+    if quebra==True:
+        file.write("\n")
+
+def escreve_n(n):
+    for item in n:
+        file.write(str(item)+";")
+
 
 ######################################
 ######### Rotina
