@@ -13,12 +13,12 @@ from decimal import Decimal
 # func(x) : Lei da Função
 # func_(x) : Derivada de func(x)
 # [a, b] : Intervalo dos valores
-a = 2
+a = 2.5
 b = 3
 # x0 : Aproximação Inicial
 x0 = float(2.5)
 # tol : tolerância
-tol = float(0.0001)
+tol = float(0.001)
 # nmax : Número máximo de interações
 nmax = int(20)
 
@@ -138,10 +138,10 @@ def bisseccao(f,a,b,nmax,tol):
         # Faz o cálculo de x1 com base nos valores de a e b.
         x1 = (a+b)/2.0
         #Calcula o valor da Lei da Função no ponto x que será usado para salvar na planilha de resultados.
-        f_a = func(a)
-        f_x1 = func(x1)
-        f_b = func(b)
-        f_d = (b-a)/x1
+        f_a = float(func(a))
+        f_x1 = float(func(x1))
+        f_b = float(func(b))
+        f_d = float((b-a)/x1)
         #Se o valor em módulo(abs) do ponto x1 para a Lei da Função for menor que a tolerância:
         if abs(f_x1) < tol: 
             #Se a interação não for a primeira(n=0) vamos conferir o critério de parada.
@@ -168,7 +168,7 @@ def bisseccao(f,a,b,nmax,tol):
                 b=x1
                 
         lista_bisseccao = [a,b,x1,f_a,f_b,f_x1,abs(f_d)]
-        lista_bisseccao_str = ("{:.5e}".format(Decimal(item)) for item in lista_bisseccao)
+        lista_bisseccao_str = ("{:.10e}".format(Decimal(item)) for item in lista_bisseccao)
         lista_n = [n]
         lista_n.extend(lista_bisseccao_str)
         file.write(";".join(map(str,lista_n)))
@@ -178,6 +178,9 @@ def bisseccao(f,a,b,nmax,tol):
     file.write("\n")
     return (x1,False)
 
+def escreve_linha(valor,quebra):
+    valor_decimal = ("{:.10e}".format(valor))
+    file.write(";".join(map(str,valor_decimal)))
 
 ######################################
 ######### Rotina
